@@ -247,42 +247,115 @@ $(function () {
         if ($('#gameBody').length) {
             var gameBody = document.getElementById("gameBody");
             
-            // 移除可能存在的旧事件监听器
-            var oldEvents = $._data && $._data(gameBody, 'events');
-            if (oldEvents && (oldEvents.touright || oldEvents.touleft || oldEvents.touup || oldEvents.toudown)) {
-                $(gameBody).off('touright touleft touup toudown');
+            // 移除旧事件监听器
+            $(gameBody).off('touright touleft touup toudown');
+            
+            // 清除可能的旧事件处理函数
+            var oldTouchStart = gameBody.ontouchstart;
+            var oldTouchEnd = gameBody.ontouchend;
+            var oldTouchMove = gameBody.ontouchmove;
+            gameBody.ontouchstart = null;
+            gameBody.ontouchend = null;
+            gameBody.ontouchmove = null;
+            
+            // 定义新的滑动检测
+            let startX, startY, endX, endY;
+            const minDistance = 30; // 最小滑动距离
+            
+            gameBody.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, false);
+            
+            gameBody.addEventListener('touchmove', function(e) {
+                e.preventDefault(); // 阻止页面滚动
+            }, { passive: false });
+            
+            gameBody.addEventListener('touchend', function(e) {
+                endX = e.changedTouches[0].clientX;
+                endY = e.changedTouches[0].clientY;
+                
+                // 计算移动距离和方向
+                const distX = endX - startX;
+                const distY = endY - startY;
+                const absX = Math.abs(distX);
+                const absY = Math.abs(distY);
+                
+                // 判断是否为有效滑动
+                if (Math.max(absX, absY) < minDistance) {
+                    return; // 滑动距离太小
+                }
+                
+                // 判断滑动方向
+                if (absX > absY) {
+                    // 水平滑动
+                    if (distX > 0) {
+                        // 向右滑动
+                        console.log("向右滑动");
+                        isNewRndItem = false;
+                        move('right');
+                        isGameOver();
+                    } else {
+                        // 向左滑动
+                        console.log("向左滑动");
+                        isNewRndItem = false;
+                        move('left');
+                        isGameOver();
+                    }
+                } else {
+                    // 垂直滑动
+                    if (distY > 0) {
+                        // 向下滑动
+                        console.log("向下滑动");
+                        isNewRndItem = false;
+                        move('down');
+                        isGameOver();
+                    } else {
+                        // 向上滑动
+                        console.log("向上滑动");
+                        isNewRndItem = false;
+                        move('up');
+                        isGameOver();
+                    }
+                }
+            }, false);
+            
+            // 禁用原有触摸事件处理
+            // 仍保留 mobilwmtouch 调用以防其他地方有依赖，但不使用其结果
+            try {
+                mobilwmtouch(gameBody);
+            } catch(e) {
+                console.log("Touch event initialization error:", e);
             }
-            
-            // 重新添加触摸事件
-            mobilwmtouch(gameBody);
-            
-            gameBody.addEventListener('touright', function(e) {
-                e.preventDefault();
-                isNewRndItem = false;
-                move('right');
-                isGameOver();
-            });
-            
-            gameBody.addEventListener('touleft', function(e) {
-                e.preventDefault();
-                isNewRndItem = false;
-                move('left');
-                isGameOver();
-            });
-            
-            gameBody.addEventListener('toudown', function(e) {
-                e.preventDefault();
-                isNewRndItem = false;
-                move('down');
-                isGameOver();
-            });
-            
-            gameBody.addEventListener('touup', function(e) {
-                e.preventDefault();
-                isNewRndItem = false;
-                move('up');
-                isGameOver();
-            });
+        }
+    }
+    
+    // 手机屏幕划动触发函数
+    function mobilwmtouch(obj) {
+        var stoux, stouy;
+        var etoux, etouy;
+        var xdire, ydire;
+        
+        // 基本兼容性定义
+        function evenzc(eve) {
+            if (typeof document.CustomEvent === 'function') {
+                this.event = new document.CustomEvent(eve, {
+                    bubbles: true,
+                    cancelable: true
+                });
+                if (!document["evetself" + eve]) {
+                    document["evetself" + eve] = this.event;
+                }
+            } else if (typeof document.createEvent === 'function') {
+                this.event = document.createEvent('HTMLEvents');
+                this.event.initEvent(eve, true, true);
+                if (!document["evetself" + eve]) {
+                    document["evetself" + eve] = this.event;
+                }
+            } else {
+                return false;
+            }
+            return document["evetself" + eve];
         }
     }
 
@@ -549,96 +622,6 @@ $(function () {
                 break;
         }
     });
-
-    // 手机屏幕划动触发
-    (function () {
-        mobilwmtouch(document.getElementById("gameBody"))
-        document.getElementById("gameBody").addEventListener('touright', function (e) {
-            e.preventDefault();
-            // alert("方向向右");
-            isNewRndItem = false;
-            move('right');
-            isGameOver();
-        });
-        document.getElementById("gameBody").addEventListener('touleft', function (e) {
-            // alert("方向向左");
-            isNewRndItem = false;
-            move('left');
-            isGameOver();
-        });
-        document.getElementById("gameBody").addEventListener('toudown', function (e) {
-            // alert("方向向下");
-            isNewRndItem = false;
-            move('down');
-            isGameOver();
-        });
-        document.getElementById("gameBody").addEventListener('touup', function (e) {
-            // alert("方向向上");
-            isNewRndItem = false;
-            move('up');
-            isGameOver();
-        });
-
-        function mobilwmtouch(obj) {
-            var stoux, stouy;
-            var etoux, etouy;
-            var xdire, ydire;
-            obj.addEventListener("touchstart", function (e) {
-                stoux = e.targetTouches[0].clientX;
-                stouy = e.targetTouches[0].clientY;
-                //console.log(stoux);
-            }, false);
-            obj.addEventListener("touchend", function (e) {
-                etoux = e.changedTouches[0].clientX;
-                etouy = e.changedTouches[0].clientY;
-                xdire = etoux - stoux;
-                ydire = etouy - stouy;
-                chazhi = Math.abs(xdire) - Math.abs(ydire);
-                //console.log(ydire);
-                if (xdire > 0 && chazhi > 0) {
-                    //console.log("right");
-                    //alert(evenzc('touright',alerts));
-                    obj.dispatchEvent(evenzc('touright'));
-
-                } else if (ydire > 0 && chazhi < 0) {
-                    //console.log("down");
-                    obj.dispatchEvent(evenzc('toudown'));
-                } else if (xdire < 0 && chazhi > 0) {
-                    //console.log("left");
-                    obj.dispatchEvent(evenzc('touleft'));
-                } else if (ydire < 0 && chazhi < 0) {
-                    //console.log("up");
-                    obj.dispatchEvent(evenzc('touup'));
-                }
-            }, false);
-
-            function evenzc(eve) {
-                if (typeof document.CustomEvent === 'function') {
-
-                    this.event = new document.CustomEvent(eve, {//自定义事件名称
-                        bubbles: false,//是否冒泡
-                        cancelable: false//是否可以停止捕获
-                    });
-                    if (!document["evetself" + eve]) {
-                        document["evetself" + eve] = this.event;
-                    }
-                } else if (typeof document.createEvent === 'function') {
-
-
-                    this.event = document.createEvent('HTMLEvents');
-                    this.event.initEvent(eve, false, false);
-                    if (!document["evetself" + eve]) {
-                        document["evetself" + eve] = this.event;
-                    }
-                } else {
-                    return false;
-                }
-
-                return document["evetself" + eve];
-
-            }
-        }
-    })();
 
     // 微信公众号接口相关功能
     function initWechatAPI() {
