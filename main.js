@@ -53,36 +53,70 @@ $(function () {
                     width: 100%;
                     height: 100%;
                     overflow: auto;
+                    margin: 0;
+                    padding: 0;
                 }
-                /* 微信浏览器专用样式 */
-                .wechat-browser html, .wechat-browser body {
-                    height: 100% !important;
-                    overflow: hidden !important;
-                    position: fixed !important;
-                    width: 100% !important;
+                .container {
+                    padding: 15px;
                 }
-                .wechat-browser #gameBody {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    overflow: hidden;
-                    -webkit-overflow-scrolling: none;
+                .main {
+                    text-align: center;
+                }
+                .gameName {
+                    font-size: 28px;
+                    margin-bottom: 10px;
+                    font-weight: bold;
+                }
+                .maxScore {
+                    font-size: 18px;
+                    margin-bottom: 20px;
+                }
+                #gameBody {
+                    background-color: rgba(0,0,0,0.1);
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin: 0 auto;
+                    touch-action: none;
+                    float: none;
+                }
+                .gameBody .row {
                     display: flex;
-                    flex-direction: column;
+                    justify-content: space-between;
+                    margin-bottom: 15px;
+                }
+                .gameBody .row:last-child {
+                    margin-bottom: 0;
+                }
+                .item {
+                    width: 22%;
+                    background-color: rgba(255,255,255,0.3);
+                    border-radius: 5px;
+                    display: flex;
                     align-items: center;
                     justify-content: center;
+                    font-size: 24px;
+                    font-weight: bold;
+                    aspect-ratio: 1/1;
                 }
-                .wechat-browser .container {
-                    width: 100%;
-                    max-height: 100vh;
-                    padding: 10px;
-                    overflow: hidden;
+                .gameRule {
+                    margin-top: 15px;
+                    font-size: 14px;
+                    color: #666;
                 }
-                .wechat-browser .gameBoard {
-                    width: 90%;
-                    max-width: 400px;
+                .scoreAndRefresh {
+                    margin-top: 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    float: none;
+                    margin: 15px auto;
+                }
+                .gameScore {
+                    font-size: 18px;
+                    margin-top: 5px;
+                }
+                .refreshBtn {
+                    margin-left: 15px;
                 }
                 /* 确保主题切换按钮可点击 */
                 #themeToggle {
@@ -99,81 +133,61 @@ $(function () {
                     justify-content: center;
                     cursor: pointer;
                 }
-                #gameBody {
-                    overflow: visible;
-                    touch-action: none;
-                    width: 100%;
+                /* 微信浏览器专用样式 */
+                .wechat-browser html, .wechat-browser body {
+                    height: 100% !important;
+                    overflow: hidden !important;
+                    position: fixed !important;
+                    width: 100% !important;
                 }
-                .gameBoard {
-                    position: relative;
-                    z-index: 1;
-                    margin: 0 auto;
-                }
-                /* 移动端样式 */
-                @media (max-width: 767px) {
-                    .gameBoard {
-                        width: 90%;
-                        max-width: 400px;
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        grid-gap: 10px;
-                        padding: 10px;
-                    }
-                    .item {
-                        aspect-ratio: 1/1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 24px;
-                        border-radius: 5px;
-                    }
-                    .container {
-                        padding: 15px;
-                    }
+                .wechat-browser .container {
+                    height: 100%;
+                    overflow: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
                 /* 桌面端样式 */
                 @media (min-width: 768px) {
                     .container {
                         max-width: 600px;
                         margin: 0 auto;
-                        padding: 20px;
                     }
-                    /* 修复电脑端游戏框布局 */
-                    .gameBoard {
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        grid-gap: 15px;
-                        padding: 15px;
-                        width: 500px;
-                        max-width: 100%;
-                        background-color: rgba(0,0,0,0.1);
-                        border-radius: 10px;
+                    .gameName {
+                        font-size: 36px;
+                    }
+                    .maxScore {
+                        font-size: 22px;
+                    }
+                    #gameBody {
+                        padding: 20px;
+                        width: 400px;
                     }
                     .item {
-                        width: 100%;
-                        aspect-ratio: 1/1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 36px;
-                        border-radius: 5px;
-                        margin: 0;
-                    }
-                    .gameScore, .maxScore {
-                        font-size: 24px;
-                        margin: 10px 0;
-                        text-align: center;
-                    }
-                    h1 {
                         font-size: 32px;
-                        text-align: center;
-                        margin-bottom: 20px;
                     }
-                    .btn {
-                        padding: 10px 20px;
-                        font-size: 18px;
-                        margin: 10px auto;
-                        display: block;
+                    .gameRule {
+                        font-size: 16px;
+                    }
+                    .scoreAndRefresh {
+                        width: 400px;
+                    }
+                    .gameScore {
+                        font-size: 22px;
+                    }
+                }
+                /* 移动端样式 */
+                @media (max-width: 767px) {
+                    .container {
+                        padding: 10px;
+                    }
+                    #gameBody {
+                        width: 300px;
+                        padding: 10px;
+                    }
+                    .item {
+                        font-size: 20px;
+                    }
+                    .scoreAndRefresh {
+                        width: 300px;
                     }
                 }
             `)
