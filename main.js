@@ -150,29 +150,56 @@ $(function () {
                     .container {
                         max-width: 600px;
                         margin: 0 auto;
+                        padding: 20px 0;
                     }
                     .gameName {
-                        font-size: 36px;
+                        font-size: 32px;
+                        margin-bottom: 15px;
                     }
                     .maxScore {
-                        font-size: 22px;
+                        font-size: 20px;
+                        margin-bottom: 25px;
                     }
                     .gameBoard {
-                        padding: 20px;
-                        width: 400px;
-                        grid-gap: 15px;
+                        padding: 12px;
+                        width: 380px;
+                        grid-gap: 8px;
+                        border-radius: 8px;
+                        background-color: rgba(0,0,0,0.15);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                     }
                     .item {
-                        font-size: 32px;
+                        font-size: 26px;
+                        border-radius: 6px;
+                        height: auto;
+                        width: 100%;
+                        transform: scale(0.95);
+                        transition: transform 0.1s ease, background-color 0.2s ease;
+                    }
+                    .item:not(.emptyItem) {
+                        transform: scale(1);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                     }
                     .gameRule {
-                        font-size: 16px;
+                        font-size: 15px;
+                        margin-top: 20px;
+                        color: rgba(255,255,255,0.7);
                     }
                     .scoreAndRefresh {
-                        width: 400px;
+                        width: 380px;
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 20px;
                     }
                     .gameScore {
-                        font-size: 22px;
+                        font-size: 20px;
+                        display: flex;
+                        align-items: center;
+                    }
+                    .btn {
+                        font-size: 15px;
+                        padding: 8px 16px;
+                        border-radius: 4px;
                     }
                 }
                 /* 移动端样式 */
