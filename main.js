@@ -49,77 +49,44 @@ $(function () {
             .prop('type', 'text/css')
             .html(`
                 html, body {
-                    height: 100%;
-                    width: 100%;
-                    overflow-x: hidden;
                     position: relative;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
                 }
                 #gameBody {
-                    touch-action: none;
-                    width: 100%;
-                    height: auto;
                     overflow: visible;
-                    position: relative;
-                    padding-bottom: 30px;
+                    touch-action: pan-x pan-y;
+                    width: 100%;
                 }
                 .gameBoard {
-                    touch-action: none;
                     position: relative;
                     z-index: 1;
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    grid-gap: 10px;
-                    padding: 10px;
                     margin: 0 auto;
-                    max-width: 95vw;
                 }
-                .item {
-                    border-radius: 5px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    aspect-ratio: 1/1;
-                    width: 100%;
-                    font-weight: bold;
-                }
-                .container {
-                    padding: 10px;
-                    width: 100%;
-                    box-sizing: border-box;
-                }
-                h1 {
-                    text-align: center;
-                    margin: 10px 0;
-                }
-                .gameScore, .maxScore {
-                    text-align: center;
-                    margin: 5px 0;
-                }
-                .btn {
-                    margin: 10px auto;
-                    display: block;
-                }
-                /* 防止内容被底部操作栏遮挡 */
-                .footer-spacer {
-                    height: 50px;
-                    width: 100%;
-                }
-                
-                /* 移动端特定样式 */
+                /* 移动端样式 */
                 @media (max-width: 767px) {
                     .gameBoard {
-                        grid-gap: 5px;
-                        padding: 5px;
+                        width: 90%;
+                        max-width: 400px;
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        grid-gap: 10px;
+                        padding: 10px;
                     }
                     .item {
+                        aspect-ratio: 1/1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                         font-size: 24px;
+                        border-radius: 5px;
                     }
-                    body {
-                        padding-bottom: 60px;
+                    .container {
+                        padding: 15px;
                     }
                 }
-                
-                /* 桌面端特定样式 */
+                /* 桌面端样式 */
                 @media (min-width: 768px) {
                     .container {
                         max-width: 600px;
@@ -128,23 +95,35 @@ $(function () {
                     }
                     .gameBoard {
                         max-width: 500px;
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
                         grid-gap: 15px;
                         padding: 15px;
                     }
                     .item {
+                        aspect-ratio: 1/1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                         font-size: 36px;
+                        border-radius: 5px;
+                        margin: 0;
                     }
                     .gameScore, .maxScore {
                         font-size: 24px;
                         margin: 10px 0;
+                        text-align: center;
                     }
                     h1 {
                         font-size: 32px;
+                        text-align: center;
                         margin-bottom: 20px;
                     }
                     .btn {
                         padding: 10px 20px;
                         font-size: 18px;
+                        margin: 10px auto;
+                        display: block;
                     }
                 }
             `)
@@ -173,8 +152,14 @@ $(function () {
             }, { passive: false });
         });
 
-        // 添加底部空间元素，防止内容被遮挡
-        $('<div class="footer-spacer"></div>').appendTo('body');
+        // 阻止特定的滚动，但允许游戏内容完整显示
+        document.addEventListener('touchmove', function(e) {
+            // 允许游戏界面内的触摸滑动
+            if ($(e.target).closest('#gameBody').length || $(e.target).closest('.gameBoard').length) {
+                return;
+            }
+            e.preventDefault();
+        }, { passive: false });
     }
 
     // 主题切换功能初始化
