@@ -66,14 +66,44 @@ $(function () {
                     z-index: 1;
                 }
                 @media (min-width: 768px) {
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                    }
                     .gameBoard {
                         max-width: 500px;
                         margin: 0 auto;
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        grid-gap: 15px;
+                        padding: 15px;
                     }
                     .item {
                         height: 100px;
                         line-height: 100px;
                         font-size: 36px;
+                        border-radius: 5px;
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .gameScore, .maxScore {
+                        font-size: 24px;
+                        margin: 10px 0;
+                        text-align: center;
+                    }
+                    h1 {
+                        font-size: 32px;
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+                    .btn {
+                        padding: 10px 20px;
+                        font-size: 18px;
+                        margin: 10px auto;
+                        display: block;
                     }
                 }
             `)
