@@ -58,6 +58,7 @@ $(function () {
                 }
                 .container {
                     padding: 15px;
+                    max-width: 100%;
                 }
                 .main {
                     text-align: center;
@@ -71,24 +72,20 @@ $(function () {
                     font-size: 18px;
                     margin-bottom: 20px;
                 }
-                #gameBody {
+                /* 游戏棋盘布局 */
+                .gameBoard {
                     background-color: rgba(0,0,0,0.1);
                     border-radius: 10px;
                     padding: 15px;
                     margin: 0 auto;
                     touch-action: none;
-                    float: none;
-                }
-                .gameBody .row {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 15px;
-                }
-                .gameBody .row:last-child {
-                    margin-bottom: 0;
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    grid-gap: 10px;
+                    width: 300px;
+                    max-width: 90%;
                 }
                 .item {
-                    width: 22%;
                     background-color: rgba(255,255,255,0.3);
                     border-radius: 5px;
                     display: flex;
@@ -108,18 +105,18 @@ $(function () {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    float: none;
+                    width: 300px;
+                    max-width: 90%;
                     margin: 15px auto;
                 }
                 .gameScore {
                     font-size: 18px;
-                    margin-top: 5px;
                 }
                 .refreshBtn {
                     margin-left: 15px;
                 }
                 /* 确保主题切换按钮可点击 */
-                #themeToggle {
+                #themeToggle, .theme-toggle {
                     position: fixed;
                     top: 10px;
                     right: 10px;
@@ -132,18 +129,32 @@ $(function () {
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
+                    pointer-events: auto !important;
                 }
+                .theme-icon {
+                    font-size: 20px;
+                    color: #333;
+                }
+                /* 数字方块样式 */
+                .item-2 { background-color: #eee4da; }
+                .item-4 { background-color: #ede0c8; }
+                .item-8 { background-color: #f2b179; color: white; }
+                .item-16 { background-color: #f59563; color: white; }
+                .item-32 { background-color: #f67c5f; color: white; }
+                .item-64 { background-color: #f65e3b; color: white; }
+                .item-128 { background-color: #edcf72; color: white; }
+                .item-256 { background-color: #edcc61; color: white; }
+                .item-512 { background-color: #edc850; color: white; }
+                .item-1024 { background-color: #edc53f; color: white; font-size: 18px; }
+                .item-2048 { background-color: #edc22e; color: white; font-size: 18px; }
+                .item-4096 { background-color: #3c3a32; color: white; font-size: 18px; }
                 /* 微信浏览器专用样式 */
                 .wechat-browser html, .wechat-browser body {
                     height: 100% !important;
-                    overflow: hidden !important;
-                    position: fixed !important;
                     width: 100% !important;
                 }
                 .wechat-browser .container {
-                    height: 100%;
-                    overflow: auto;
-                    -webkit-overflow-scrolling: touch;
+                    padding: 10px;
                 }
                 /* 桌面端样式 */
                 @media (min-width: 768px) {
@@ -157,9 +168,10 @@ $(function () {
                     .maxScore {
                         font-size: 22px;
                     }
-                    #gameBody {
+                    .gameBoard {
                         padding: 20px;
                         width: 400px;
+                        grid-gap: 15px;
                     }
                     .item {
                         font-size: 32px;
@@ -179,15 +191,15 @@ $(function () {
                     .container {
                         padding: 10px;
                     }
-                    #gameBody {
-                        width: 300px;
+                    .gameBoard {
                         padding: 10px;
+                        grid-gap: 8px;
                     }
                     .item {
                         font-size: 20px;
                     }
-                    .scoreAndRefresh {
-                        width: 300px;
+                    .item-1024, .item-2048, .item-4096 {
+                        font-size: 16px;
                     }
                 }
             `)
@@ -197,45 +209,63 @@ $(function () {
         if (isWeixinBrowser()) {
             $('body').addClass('wechat-browser');
             
-            // 微信中彻底禁用滚动
-            document.body.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-            }, { passive: false });
-            
-            document.body.addEventListener('touchstart', function(e) {
-                if (!$(e.target).closest('#themeToggle').length) {
+            // 仅阻止页面级滚动，允许游戏内元素交互
+            document.addEventListener('touchmove', function(e) {
+                if (!$(e.target).closest('.gameBoard').length && 
+                    !$(e.target).closest('.theme-toggle').length && 
+                    !$(e.target).closest('#themeToggle').length) {
                     e.preventDefault();
                 }
             }, { passive: false });
-            
-            // 特别处理主题切换按钮，确保可点击
-            $('#themeToggle').on('touchstart touchend click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // 固定窗口高度，防止地址栏变动导致布局问题
-            var fixHeight = function() {
-                var vh = window.innerHeight;
-                document.documentElement.style.setProperty('--vh', vh + 'px');
-                $('.wechat-browser #gameBody').css('height', vh + 'px');
-            };
-            
-            window.addEventListener('resize', fixHeight);
-            window.addEventListener('orientationchange', fixHeight);
-            fixHeight();
         }
         
-        // 针对所有浏览器禁止滚动
-        document.addEventListener('touchmove', function(e) {
-            if (!$(e.target).closest('#themeToggle').length) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // 确保明暗切换按钮可点击
+        $(document).on('touchstart touchend click', '.theme-toggle, #themeToggle', function(e) {
+            e.stopPropagation();
+            return true;
+        });
         
-        // 禁止滚轮事件
-        document.addEventListener('wheel', function(e) {
-            e.preventDefault();
-        }, { passive: false });
+        // 修复移动端触摸事件
+        if ($('#gameBody').length) {
+            var gameBody = document.getElementById("gameBody");
+            
+            // 移除可能存在的旧事件监听器
+            var oldEvents = $._data(gameBody, 'events');
+            if (oldEvents && (oldEvents.touright || oldEvents.touleft || oldEvents.touup || oldEvents.toudown)) {
+                $(gameBody).off('touright touleft touup toudown');
+            }
+            
+            // 重新添加触摸事件
+            mobilwmtouch(gameBody);
+            
+            gameBody.addEventListener('touright', function(e) {
+                e.preventDefault();
+                isNewRndItem = false;
+                move('right');
+                isGameOver();
+            });
+            
+            gameBody.addEventListener('touleft', function(e) {
+                e.preventDefault();
+                isNewRndItem = false;
+                move('left');
+                isGameOver();
+            });
+            
+            gameBody.addEventListener('toudown', function(e) {
+                e.preventDefault();
+                isNewRndItem = false;
+                move('down');
+                isGameOver();
+            });
+            
+            gameBody.addEventListener('touup', function(e) {
+                e.preventDefault();
+                isNewRndItem = false;
+                move('up');
+                isGameOver();
+            });
+        }
     }
 
     // 主题切换功能初始化
