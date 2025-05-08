@@ -30,18 +30,41 @@ $(function () {
     // 微信接口初始化
     initWechatAPI();
 
-    // 禁用网页滑动功能
+    // 禁用网页滑动功能 - 增强版
     function disablePageScroll() {
+        // 方法1：阻止touchmove事件
         document.body.addEventListener('touchmove', function(e) {
             if (!$(e.target).closest('#gameBody').length) {
                 e.preventDefault();
             }
         }, { passive: false });
         
-        // 添加桌面端显示优化样式
+        // 方法2：阻止滚轮事件
+        document.body.addEventListener('wheel', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // 方法3：通过CSS固定body
         $('<style>')
             .prop('type', 'text/css')
             .html(`
+                html, body {
+                    position: fixed;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                }
+                #gameBody {
+                    overflow: hidden;
+                    touch-action: none;
+                    height: 100%;
+                    width: 100%;
+                }
+                .gameBoard {
+                    touch-action: none;
+                    position: relative;
+                    z-index: 1;
+                }
                 @media (min-width: 768px) {
                     .gameBoard {
                         max-width: 500px;
@@ -55,6 +78,29 @@ $(function () {
                 }
             `)
             .appendTo('head');
+            
+        // 方法4：微信特定处理
+        document.addEventListener('WeixinJSBridgeReady', function() {
+            if (typeof WeixinJSBridge !== 'undefined') {
+                // 尝试禁用微信特有的滚动行为
+                WeixinJSBridge.call('hideOptionMenu');
+            }
+        }, false);
+        
+        // 方法5：防止默认事件
+        document.addEventListener('touchstart', function(e) {
+            if (!$(e.target).closest('#gameBody').length) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // 方法6：处理其他可能的滚动事件
+        ['scroll', 'mousewheel', 'DOMMouseScroll'].forEach(function(event) {
+            document.addEventListener(event, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
+        });
     }
 
     // 主题切换功能初始化
