@@ -12,6 +12,9 @@ $(function () {
         isLoggedIn: false
     };
 
+    // 禁用网页的上下左右滑动
+    disablePageScroll();
+
     // 主题切换功能
     initThemeToggle();
 
@@ -27,12 +30,47 @@ $(function () {
     // 微信接口初始化
     initWechatAPI();
 
+    // 禁用网页滑动功能
+    function disablePageScroll() {
+        document.body.addEventListener('touchmove', function(e) {
+            if (!$(e.target).closest('#gameBody').length) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // 添加桌面端显示优化样式
+        $('<style>')
+            .prop('type', 'text/css')
+            .html(`
+                @media (min-width: 768px) {
+                    .gameBoard {
+                        max-width: 500px;
+                        margin: 0 auto;
+                    }
+                    .item {
+                        height: 100px;
+                        line-height: 100px;
+                        font-size: 36px;
+                    }
+                }
+            `)
+            .appendTo('head');
+    }
+
     // 主题切换功能初始化
     function initThemeToggle() {
+        // 设置默认主题为白色
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light-theme');
+        }
+        
         // 检查本地存储中是否有主题设置
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             $('html').removeClass().addClass(savedTheme);
+        } else {
+            // 默认使用白色主题
+            $('html').removeClass().addClass('light-theme');
         }
 
         // 主题切换按钮点击事件
