@@ -54,6 +54,34 @@ $(function () {
                     height: 100%;
                     overflow: auto;
                 }
+                /* 微信浏览器专用样式 */
+                .wechat-browser html, .wechat-browser body {
+                    height: 100% !important;
+                    overflow: hidden;
+                }
+                .wechat-browser #gameBody {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    overflow: auto;
+                    -webkit-overflow-scrolling: touch;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .wechat-browser .container {
+                    width: 100%;
+                    max-height: 100vh;
+                    padding: 10px;
+                    overflow: visible;
+                }
+                .wechat-browser .gameBoard {
+                    width: 90%;
+                    max-width: 400px;
+                }
                 #gameBody {
                     overflow: visible;
                     touch-action: pan-x pan-y;
@@ -129,29 +157,38 @@ $(function () {
             `)
             .appendTo('head');
             
-        // 方法4：微信特定处理
-        document.addEventListener('WeixinJSBridgeReady', function() {
-            if (typeof WeixinJSBridge !== 'undefined') {
-                // 尝试禁用微信特有的滚动行为
-                WeixinJSBridge.call('hideOptionMenu');
-            }
-        }, false);
-        
-        // 方法5：防止默认事件
-        document.addEventListener('touchstart', function(e) {
-            if (!$(e.target).closest('#gameBody').length) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-        
-        // 方法6：处理其他可能的滚动事件
-        ['scroll', 'mousewheel', 'DOMMouseScroll'].forEach(function(event) {
-            document.addEventListener(event, function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+        // 检测微信浏览器并添加类名
+        if (isWeixinBrowser()) {
+            $('body').addClass('wechat-browser');
+            
+            // 微信浏览器阻止特定行为
+            document.addEventListener('WeixinJSBridgeReady', function() {
+                document.addEventListener('touchmove', function(e) {
+                    if (!$(e.target).closest('.gameBoard').length) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+            
+            // 防止页面弹性滚动
+            document.body.addEventListener('touchmove', function(e) {
+                if (!$(e.target).closest('.gameBoard').length) {
+                    e.preventDefault();
+                }
             }, { passive: false });
-        });
-
+            
+            // 固定窗口高度，防止地址栏变动导致布局问题
+            var fixHeight = function() {
+                var vh = window.innerHeight;
+                document.documentElement.style.setProperty('--vh', vh + 'px');
+                $('.wechat-browser #gameBody').css('height', vh + 'px');
+            };
+            
+            window.addEventListener('resize', fixHeight);
+            window.addEventListener('orientationchange', fixHeight);
+            fixHeight();
+        }
+        
         // 阻止特定的滚动，但允许游戏内容完整显示
         document.addEventListener('touchmove', function(e) {
             // 允许游戏界面内的触摸滑动
