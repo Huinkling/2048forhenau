@@ -57,7 +57,9 @@ $(function () {
                 /* 微信浏览器专用样式 */
                 .wechat-browser html, .wechat-browser body {
                     height: 100% !important;
-                    overflow: hidden;
+                    overflow: hidden !important;
+                    position: fixed !important;
+                    width: 100% !important;
                 }
                 .wechat-browser #gameBody {
                     position: fixed;
@@ -65,8 +67,8 @@ $(function () {
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    overflow: auto;
-                    -webkit-overflow-scrolling: touch;
+                    overflow: hidden;
+                    -webkit-overflow-scrolling: none;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -76,15 +78,30 @@ $(function () {
                     width: 100%;
                     max-height: 100vh;
                     padding: 10px;
-                    overflow: visible;
+                    overflow: hidden;
                 }
                 .wechat-browser .gameBoard {
                     width: 90%;
                     max-width: 400px;
                 }
+                /* 确保主题切换按钮可点击 */
+                #themeToggle {
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    z-index: 1000;
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(255,255,255,0.2);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                }
                 #gameBody {
                     overflow: visible;
-                    touch-action: pan-x pan-y;
+                    touch-action: none;
                     width: 100%;
                 }
                 .gameBoard {
@@ -121,14 +138,19 @@ $(function () {
                         margin: 0 auto;
                         padding: 20px;
                     }
+                    /* 修复电脑端游戏框布局 */
                     .gameBoard {
-                        max-width: 500px;
                         display: grid;
                         grid-template-columns: repeat(4, 1fr);
                         grid-gap: 15px;
                         padding: 15px;
+                        width: 500px;
+                        max-width: 100%;
+                        background-color: rgba(0,0,0,0.1);
+                        border-radius: 10px;
                     }
                     .item {
+                        width: 100%;
                         aspect-ratio: 1/1;
                         display: flex;
                         align-items: center;
@@ -161,21 +183,21 @@ $(function () {
         if (isWeixinBrowser()) {
             $('body').addClass('wechat-browser');
             
-            // 微信浏览器阻止特定行为
-            document.addEventListener('WeixinJSBridgeReady', function() {
-                document.addEventListener('touchmove', function(e) {
-                    if (!$(e.target).closest('.gameBoard').length) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-            });
-            
-            // 防止页面弹性滚动
+            // 微信中彻底禁用滚动
             document.body.addEventListener('touchmove', function(e) {
-                if (!$(e.target).closest('.gameBoard').length) {
+                e.preventDefault();
+            }, { passive: false });
+            
+            document.body.addEventListener('touchstart', function(e) {
+                if (!$(e.target).closest('#themeToggle').length) {
                     e.preventDefault();
                 }
             }, { passive: false });
+            
+            // 特别处理主题切换按钮，确保可点击
+            $('#themeToggle').on('touchstart touchend click', function(e) {
+                e.stopPropagation();
+            });
             
             // 固定窗口高度，防止地址栏变动导致布局问题
             var fixHeight = function() {
@@ -189,12 +211,15 @@ $(function () {
             fixHeight();
         }
         
-        // 阻止特定的滚动，但允许游戏内容完整显示
+        // 针对所有浏览器禁止滚动
         document.addEventListener('touchmove', function(e) {
-            // 允许游戏界面内的触摸滑动
-            if ($(e.target).closest('#gameBody').length || $(e.target).closest('.gameBoard').length) {
-                return;
+            if (!$(e.target).closest('#themeToggle').length) {
+                e.preventDefault();
             }
+        }, { passive: false });
+        
+        // 禁止滚轮事件
+        document.addEventListener('wheel', function(e) {
             e.preventDefault();
         }, { passive: false });
     }
