@@ -30,20 +30,8 @@ $(function () {
     // 微信接口初始化
     initWechatAPI();
 
-    // 禁用网页滑动功能 - 增强版
+    // 禁用网页滑动功能并设置样式
     function disablePageScroll() {
-        // 方法1：阻止touchmove事件
-        document.body.addEventListener('touchmove', function(e) {
-            if (!$(e.target).closest('#gameBody').length) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-        
-        // 方法2：阻止滚轮事件
-        document.body.addEventListener('wheel', function(e) {
-            e.preventDefault();
-        }, { passive: false });
-        
         // 方法3：通过CSS固定body
         $('<style>')
             .prop('type', 'text/css')
@@ -117,19 +105,20 @@ $(function () {
                 }
                 /* 确保主题切换按钮可点击 */
                 #themeToggle, .theme-toggle {
-                    position: fixed;
-                    top: 10px;
-                    right: 10px;
-                    z-index: 1000;
-                    width: 40px;
-                    height: 40px;
-                    background: rgba(255,255,255,0.2);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
+                    position: absolute !important;
+                    top: 10px !important;
+                    right: 10px !important;
+                    z-index: 1000 !important;
+                    width: 40px !important;
+                    height: 40px !important;
+                    background: rgba(255,255,255,0.3) !important;
+                    border-radius: 50% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    cursor: pointer !important;
                     pointer-events: auto !important;
+                    border: 1px solid rgba(0,0,0,0.1) !important;
                 }
                 .theme-icon {
                     font-size: 20px;
@@ -218,19 +207,48 @@ $(function () {
                 }
             }, { passive: false });
         }
+    }
+
+    // 主题切换功能初始化
+    function initThemeToggle() {
+        // 设置默认主题为白色
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light-theme');
+        }
         
-        // 确保明暗切换按钮可点击
-        $(document).on('touchstart touchend click', '.theme-toggle, #themeToggle', function(e) {
+        // 检查本地存储中是否有主题设置
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            $('html').removeClass().addClass(savedTheme);
+        } else {
+            // 默认使用白色主题
+            $('html').removeClass().addClass('light-theme');
+        }
+
+        // 主题切换按钮点击事件 - 使用事件委托，确保在所有环境下都能工作
+        $(document).on('click touchend', '.theme-toggle, #themeToggle', function(e) {
+            e.preventDefault();
             e.stopPropagation();
-            return true;
+            
+            if ($('html').hasClass('light-theme')) {
+                $('html').removeClass('light-theme').addClass('dark-theme');
+                localStorage.setItem('theme', 'dark-theme');
+            } else {
+                $('html').removeClass('dark-theme').addClass('light-theme');
+                localStorage.setItem('theme', 'light-theme');
+            }
+            
+            return false;
         });
-        
-        // 修复移动端触摸事件
+    }
+
+    // 修复移动端触摸事件
+    function setupMobileTouchEvents() {
         if ($('#gameBody').length) {
             var gameBody = document.getElementById("gameBody");
             
             // 移除可能存在的旧事件监听器
-            var oldEvents = $._data(gameBody, 'events');
+            var oldEvents = $._data && $._data(gameBody, 'events');
             if (oldEvents && (oldEvents.touright || oldEvents.touleft || oldEvents.touup || oldEvents.toudown)) {
                 $(gameBody).off('touright touleft touup toudown');
             }
@@ -266,34 +284,6 @@ $(function () {
                 isGameOver();
             });
         }
-    }
-
-    // 主题切换功能初始化
-    function initThemeToggle() {
-        // 设置默认主题为白色
-        if (!localStorage.getItem('theme')) {
-            localStorage.setItem('theme', 'light-theme');
-        }
-        
-        // 检查本地存储中是否有主题设置
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            $('html').removeClass().addClass(savedTheme);
-        } else {
-            // 默认使用白色主题
-            $('html').removeClass().addClass('light-theme');
-        }
-
-        // 主题切换按钮点击事件
-        $('#themeToggle').click(function() {
-            if ($('html').hasClass('light-theme')) {
-                $('html').removeClass('light-theme').addClass('dark-theme');
-                localStorage.setItem('theme', 'dark-theme');
-            } else {
-                $('html').removeClass('dark-theme').addClass('light-theme');
-                localStorage.setItem('theme', 'light-theme');
-            }
-        });
     }
 
     // 排行榜按钮点击事件
@@ -496,6 +486,9 @@ $(function () {
         //随机生成两个新元素
         newRndItem();
         newRndItem();
+        
+        // 设置移动端触摸事件
+        setupMobileTouchEvents();
     }
 
     //随机生成新元素
