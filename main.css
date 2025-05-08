@@ -1,0 +1,500 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "YouYuan", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+:root {
+    /* 深色主题变量 */
+    --color-bg-dark: #0d1117;
+    --color-bg-canvas: #161b22;
+    --color-bg-item: #21262d;
+    --color-border: #30363d;
+    --color-text: #c9d1d9;
+    --color-text-secondary: #8b949e;
+    --color-btn-primary: #238636;
+    --color-btn-primary-hover: #2ea043;
+    --color-btn-danger: #da3633;
+    --color-btn-danger-hover: #f85149;
+    --color-btn-default: #21262d;
+    --color-btn-default-hover: #30363d;
+    --color-link: #58a6ff;
+    
+    /* 方块颜色 - 深色主题 */
+    --color-item-2: #fce566;
+    --color-item-4: #add8e6;
+    --color-item-8: #90ee90;
+    --color-item-16: #ff9999;
+    --color-item-32: #c3b1e1;
+    --color-item-64: #ffd700;
+    --color-item-128: #ff7f50;
+    --color-item-256: #20b2aa;
+    --color-item-512: #ff69b4;
+    --color-item-1024: #ba55d3;
+    --color-item-2048: #00ced1;
+    --color-item-4096: #ff1493;
+}
+
+/* 浅色主题变量 */
+:root.light-theme {
+    --color-bg-dark: #f5f5f7;
+    --color-bg-canvas: rgba(255, 255, 255, 0.7);
+    --color-bg-item: rgba(255, 255, 255, 0.5);
+    --color-border: rgba(0, 0, 0, 0.1);
+    --color-text: #1d1d1f;
+    --color-text-secondary: #6e6e73;
+    --color-btn-primary: #0071e3;
+    --color-btn-primary-hover: #147ce5;
+    --color-btn-danger: #ff453a;
+    --color-btn-danger-hover: #ff6961;
+    --color-btn-default: rgba(0, 0, 0, 0.05);
+    --color-btn-default-hover: rgba(0, 0, 0, 0.1);
+    --color-link: #0066cc;
+    
+    /* 方块颜色 - 浅色主题 */
+    --color-item-2: #eee4da;
+    --color-item-4: #ede0c8;
+    --color-item-8: #f2b179;
+    --color-item-16: #f59563;
+    --color-item-32: #f67c5f;
+    --color-item-64: #f65e3b;
+    --color-item-128: #edcf72;
+    --color-item-256: #edcc61;
+    --color-item-512: #edc850;
+    --color-item-1024: #edc53f;
+    --color-item-2048: #edc22e;
+    --color-item-4096: #3c3a32;
+}
+
+/* 主题切换过渡效果 */
+body, .container, .main, .gameBoard, .item, .btn, .modal-content, .gameScore, .gameRule {
+    transition: all 0.3s ease;
+}
+
+body {
+    background: var(--color-bg-dark);
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    color: var(--color-text);
+}
+
+/* 毛玻璃效果 */
+.light-theme .gameBoard,
+.light-theme .modal-content {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    padding: 10px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-btn-default);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    background: var(--color-btn-default-hover);
+}
+
+.theme-icon {
+    font-size: 20px;
+    color: var(--color-text);
+    transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.moon-icon {
+    opacity: 0;
+    position: absolute;
+    transform: rotate(-90deg);
+}
+
+.sun-icon {
+    opacity: 1;
+    position: absolute;
+    transform: rotate(0);
+}
+
+.light-theme .moon-icon {
+    opacity: 1;
+    transform: rotate(0);
+}
+
+.light-theme .sun-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main .gameName {
+    font-size: 7vw;
+    font-weight: bold;
+    margin-bottom: 10px;
+    max-font-size: 35px;
+    color: var(--color-text);
+}
+
+.main .maxScore {
+    font-size: 4vw;
+    max-font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--color-text-secondary);
+}
+
+.main .maxScore span {
+    color: var(--color-link);
+    font-weight: bold;
+}
+
+.main .gameBoard {
+    width: 95%;
+    max-width: 450px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+    padding: 15px;
+    background: var(--color-bg-canvas);
+    border-radius: 8px;
+    aspect-ratio: 1;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* 浅色主题下会有毛玻璃效果 */
+}
+
+.main .gameBoard .item {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: var(--color-bg-item);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6vw;
+    max-font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    border: 1px solid var(--color-border);
+    transition: all 0.15s ease-in-out;
+    margin: 0;
+}
+
+.light-theme .main .gameBoard .item {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.main .gameRule {
+    font-size: 3.2vw;
+    max-font-size: 16px;
+    margin-top: 15px;
+    color: var(--color-text-secondary);
+}
+
+.main .gameScore {
+    font-size: 4vw;
+    max-font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+    color: var(--color-text);
+}
+
+.main .gameScore span {
+    color: var(--color-link);
+    font-size: 6vw;
+    max-font-size: 30px;
+}
+
+.main .scoreAndRefresh {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 90%;
+    max-width: 400px;
+    margin: 15px auto;
+}
+
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 3.5vw;
+    max-font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+}
+
+.btn-success {
+    background: var(--color-btn-primary);
+    color: white;
+}
+
+.btn-success:hover {
+    background: var(--color-btn-primary-hover);
+}
+
+.btn-info {
+    background: var(--color-btn-default);
+    color: var(--color-text);
+}
+
+.btn-info:hover {
+    background: var(--color-btn-default-hover);
+}
+
+.btn-danger {
+    background: var(--color-btn-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--color-btn-danger-hover);
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.light-theme .modal {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    background-color: var(--color-bg-canvas);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.light-theme .modal-content {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modal .modal-header {
+    border-bottom: 1px solid var(--color-border);
+    padding: 15px;
+}
+
+.modal .modal-header h4 {
+    text-align: left;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.modal .modal-dialog {
+    width: 90%;
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+.modal .modal-body {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-link);
+    padding: 20px;
+    text-align: center;
+}
+
+.modal .modal-footer {
+    border-top: 1px solid var(--color-border);
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal .close {
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+}
+
+.modal .close:hover {
+    color: var(--color-text);
+    opacity: 1;
+}
+
+/* 排行榜表格样式 */
+.rankingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.rankingTable th, .rankingTable td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 14px;
+}
+
+.rankingTable th {
+    background-color: var(--color-bg-item);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.rankingTable tr:hover {
+    background-color: rgba(56, 139, 253, 0.1);
+}
+
+.light-theme .rankingTable tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.rankingTable .currentUser {
+    background-color: rgba(56, 139, 253, 0.15);
+    font-weight: bold;
+}
+
+.light-theme .rankingTable .currentUser {
+    background-color: rgba(0, 113, 227, 0.1);
+}
+
+@media screen and (min-width: 768px) {
+    .main .gameName {
+        font-size: 35px;
+    }
+    
+    .main .maxScore {
+        font-size: 20px;
+    }
+    
+    .main .gameBoard .item {
+        font-size: 28px;
+    }
+    
+    .main .gameRule {
+        font-size: 16px;
+    }
+    
+    .main .gameScore {
+        font-size: 20px;
+    }
+    
+    .main .gameScore span {
+        font-size: 30px;
+    }
+    
+    .btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+/* 电脑适配优化 */
+@media screen and (min-width: 992px) {
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    
+    .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 1000px;
+    }
+    
+    .main .gameBoard {
+        max-width: 500px;
+    }
+    
+    .main .gameBoard .item {
+        font-size: 32px;
+        margin: 8px;
+    }
+    
+    .scoreAndRefresh {
+        margin-top: 25px;
+    }
+}
+
+/* 块的颜色样式 */
+.item-2 {
+    background-color: var(--color-item-2) !important;
+}
+
+.item-4 {
+    background-color: var(--color-item-4) !important;
+}
+
+.item-8 {
+    background-color: var(--color-item-8) !important;
+}
+
+.item-16 {
+    background-color: var(--color-item-16) !important;
+}
+
+.item-32 {
+    background-color: var(--color-item-32) !important;
+}
+
+.item-64 {
+    background-color: var(--color-item-64) !important;
+}
+
+.item-128 {
+    background-color: var(--color-item-128) !important;
+}
+
+.item-256 {
+    background-color: var(--color-item-256) !important;
+}
+
+.item-512 {
+    background-color: var(--color-item-512) !important;
+}
+
+.item-1024 {
+    background-color: var(--color-item-1024) !important;
+}
+
+.item-2048 {
+    background-color: var(--color-item-2048) !important;
+}
+
+.item-4096 {
+    background-color: var(--color-item-4096) !important;
+}

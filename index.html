@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="dark-theme">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>2048小游戏 - 河南农业大学</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+    <script type="text/javascript" src="main.js"></script>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGISURBVFhH7ZY/S8NAGMafrS1CC4JDl0LBoYODIIiD4CcQXAQdFBEHcXRxc3ER3MRZ6FdwKjh0c3VyExE6CC5Fi5T4e8kLaWPTu6SLQx54uLx3f557crk/V2FMc8A8kCDWYBZQVbWuBdSlFj8GjAOMo3cNDcADXIE7cC/2IPJ2vvMjrGMEcB4DFzYODHtYAr9oRwz3oAEuHRwaNpEFbbQjhhNQAm0PB4ZTUAId9COGDcjAcQxHg5A3l8Ex1Lns60fcBuME7QCGw4lUMtWU7xoYQqZCJkMmQx1UQQHy0jdRE8qiTDIZ8lvHBXXZxlYRVeDKj1iGukxiXba3FUS7vAB94KkZGoFGZzr/8Tx2AVdXBU90HQl6eQE+QFPm/SIOuG93xBQUdvkQXLm6HlYi1gGfeMHlmZBHMGvIQs5tDsS5/BtcQVZ2wzx4BvOGEszZHEKsuZ8CNl+DHRiaAMOwDDT3Xg5M4uVjQB2WwODbcBb6Mv7UuR+L4Alw2S3Ks+T7i2lfyC+KorwDaqDRZOjZgkAAAAAASUVORK5CYII=">
+</head>
+<body>
+
+<div class="container">
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun theme-icon sun-icon"></i>
+        <i class="fas fa-moon theme-icon moon-icon"></i>
+    </div>
+    
+    <div class="main">
+        <div class="gameName">2048小游戏</div>
+        <div class="maxScore">最高分：
+            <span id="maxScore">0</span>
+        </div>
+        <div class="gameBoard" id="gameBody">
+            <div class="item emptyItem x0y0" x="0" y="0"></div>
+            <div class="item emptyItem x0y1" x="0" y="1"></div>
+            <div class="item emptyItem x0y2" x="0" y="2"></div>
+            <div class="item emptyItem x0y3" x="0" y="3"></div>
+            <div class="item emptyItem x1y0" x="1" y="0"></div>
+            <div class="item emptyItem x1y1" x="1" y="1"></div>
+            <div class="item emptyItem x1y2" x="1" y="2"></div>
+            <div class="item emptyItem x1y3" x="1" y="3"></div>
+            <div class="item emptyItem x2y0" x="2" y="0"></div>
+            <div class="item emptyItem x2y1" x="2" y="1"></div>
+            <div class="item emptyItem x2y2" x="2" y="2"></div>
+            <div class="item emptyItem x2y3" x="2" y="3"></div>
+            <div class="item emptyItem x3y0" x="3" y="0"></div>
+            <div class="item emptyItem x3y1" x="3" y="1"></div>
+            <div class="item emptyItem x3y2" x="3" y="2"></div>
+            <div class="item emptyItem x3y3" x="3" y="3"></div>
+        </div>
+        <div class="gameRule">电脑：请用键盘的方向键进行操作</div>
+        <div class="gameRule">手机：请划动屏幕进行操作</div>
+        <div class="scoreAndRefresh">
+            <div class="gameScore">得分：<span id="gameScore">0</span> 分</div>
+            <button type="button" class="btn btn-danger refreshBtn">
+                刷新
+            </button>
+            <button type="button" class="btn btn-success" id="rankingBtn">
+                排行榜
+            </button>
+        </div>
+
+        <!-- 游戏结束弹窗 -->
+        <div class="modal fade" id="gameOverModal" aria-labelledby="gameOverModalLabel" aria-hidden="true"
+             data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×
+                        </button>
+                        <h4 class="modal-tittle" id="gameOverModalLabel">游戏结束</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Game Over! 您的得分是: <span id="finalScore">0</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="showRankingBtn">查看排行榜</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-danger refreshBtn">再玩一次</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 排行榜弹窗 -->
+        <div class="modal fade" id="rankingModal" aria-labelledby="rankingModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×
+                        </button>
+                        <h4 class="modal-tittle" id="rankingModalLabel">排行榜</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="rankingTable" id="rankingTable">
+                            <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>姓名</th>
+                                    <th>班级</th>
+                                    <th>分数</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rankingBody">
+                                <!-- 排行榜数据会在JS中动态填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
