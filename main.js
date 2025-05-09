@@ -37,73 +37,85 @@ $(function () {
             .prop('type', 'text/css')
             .html(`
                 html, body {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    overflow: auto;
-                    margin: 0;
-                    padding: 0;
+                    position: relative !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    overflow: auto !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
                 }
                 .container {
-                    padding: 15px;
-                    max-width: 100%;
+                    padding: 15px !important;
+                    max-width: 100% !important;
                 }
                 .main {
-                    text-align: center;
+                    text-align: center !important;
                 }
                 .gameName {
-                    font-size: 28px;
-                    margin-bottom: 10px;
-                    font-weight: bold;
+                    font-size: 28px !important;
+                    margin-bottom: 10px !important;
+                    font-weight: bold !important;
                 }
                 .maxScore {
-                    font-size: 18px;
-                    margin-bottom: 20px;
+                    font-size: 18px !important;
+                    margin-bottom: 20px !important;
                 }
                 /* 游戏棋盘布局 */
-                .gameBoard {
-                    background-color: rgba(0,0,0,0.1);
-                    border-radius: 10px;
-                    padding: 15px;
-                    margin: 0 auto;
-                    touch-action: none;
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    grid-gap: 10px;
-                    width: 300px;
-                    max-width: 90%;
-                    box-sizing: border-box;
+                #gameBody.gameBoard, .gameBoard {
+                    background-color: rgba(0,0,0,0.1) !important;
+                    border-radius: 10px !important;
+                    padding: 15px !important;
+                    margin: 0 auto !important;
+                    touch-action: none !important;
+                    display: grid !important;
+                    grid-template-columns: repeat(4, 1fr) !important;
+                    grid-template-rows: repeat(4, 1fr) !important;
+                    grid-gap: 10px !important;
+                    width: 300px !important;
+                    max-width: 90% !important;
+                    box-sizing: border-box !important;
+                    float: none !important;
                 }
-                .item {
-                    background-color: rgba(255,255,255,0.3);
-                    border-radius: 5px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 24px;
-                    font-weight: bold;
-                    aspect-ratio: 1/1;
-                    box-sizing: border-box;
+                #gameBody .row {
+                    display: flex !important;
+                    margin: 0 !important; 
+                    padding: 0 !important;
+                    width: 100% !important;
+                }
+                #gameBody .item, .gameBoard .item {
+                    background-color: rgba(255,255,255,0.3) !important;
+                    border-radius: 5px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    font-size: 24px !important;
+                    font-weight: bold !important;
+                    aspect-ratio: 1/1 !important;
+                    box-sizing: border-box !important;
+                    float: none !important;
+                    width: auto !important;
+                    height: auto !important;
                 }
                 .gameRule {
-                    margin-top: 15px;
-                    font-size: 14px;
-                    color: #666;
+                    margin-top: 15px !important;
+                    font-size: 14px !important;
+                    color: #666 !important;
                 }
                 .scoreAndRefresh {
-                    margin-top: 15px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 300px;
-                    max-width: 90%;
-                    margin: 15px auto;
+                    margin-top: 15px !important;
+                    display: flex !important;
+                    justify-content: space-between !important;
+                    align-items: center !important;
+                    width: 300px !important;
+                    max-width: 90% !important;
+                    margin: 15px auto !important;
                 }
                 .gameScore {
-                    font-size: 18px;
+                    font-size: 18px !important;
+                    margin: 0 !important;
                 }
                 .refreshBtn {
-                    margin-left: 15px;
+                    margin-left: 15px !important;
                 }
                 /* 确保主题切换按钮可点击 */
                 #themeToggle, .theme-toggle {
@@ -123,109 +135,98 @@ $(function () {
                     border: 1px solid rgba(0,0,0,0.1) !important;
                 }
                 .theme-icon {
-                    font-size: 20px;
-                    color: #333;
+                    font-size: 20px !important;
+                    color: #333 !important;
                 }
                 /* 数字方块样式 */
-                .item-2 { background-color: #eee4da; }
-                .item-4 { background-color: #ede0c8; }
-                .item-8 { background-color: #f2b179; color: white; }
-                .item-16 { background-color: #f59563; color: white; }
-                .item-32 { background-color: #f67c5f; color: white; }
-                .item-64 { background-color: #f65e3b; color: white; }
-                .item-128 { background-color: #edcf72; color: white; }
-                .item-256 { background-color: #edcc61; color: white; }
-                .item-512 { background-color: #edc850; color: white; }
-                .item-1024 { background-color: #edc53f; color: white; font-size: 18px; }
-                .item-2048 { background-color: #edc22e; color: white; font-size: 18px; }
-                .item-4096 { background-color: #3c3a32; color: white; font-size: 18px; }
+                .item-2 { background-color: #eee4da !important; }
+                .item-4 { background-color: #ede0c8 !important; }
+                .item-8 { background-color: #f2b179 !important; color: white !important; }
+                .item-16 { background-color: #f59563 !important; color: white !important; }
+                .item-32 { background-color: #f67c5f !important; color: white !important; }
+                .item-64 { background-color: #f65e3b !important; color: white !important; }
+                .item-128 { background-color: #edcf72 !important; color: white !important; }
+                .item-256 { background-color: #edcc61 !important; color: white !important; }
+                .item-512 { background-color: #edc850 !important; color: white !important; }
+                .item-1024 { background-color: #edc53f !important; color: white !important; font-size: 18px !important; }
+                .item-2048 { background-color: #edc22e !important; color: white !important; font-size: 18px !important; }
+                .item-4096 { background-color: #3c3a32 !important; color: white !important; font-size: 18px !important; }
                 /* 微信浏览器专用样式 */
                 .wechat-browser html, .wechat-browser body {
                     height: 100% !important;
                     width: 100% !important;
                 }
                 .wechat-browser .container {
-                    padding: 10px;
+                    padding: 10px !important;
                 }
                 /* 桌面端样式 */
                 @media (min-width: 768px) {
                     .container {
-                        max-width: 600px;
-                        margin: 0 auto;
-                        padding: 20px;
-                        box-sizing: border-box;
+                        max-width: 600px !important;
+                        margin: 0 auto !important;
+                        padding: 20px !important;
+                        box-sizing: border-box !important;
                     }
                     .main {
-                        width: 100%;
-                        box-sizing: border-box;
+                        width: 100% !important;
+                        box-sizing: border-box !important;
                     }
                     .gameName {
-                        font-size: 32px;
-                        margin-bottom: 15px;
+                        font-size: 32px !important;
+                        margin-bottom: 15px !important;
                     }
                     .maxScore {
-                        font-size: 20px;
-                        margin-bottom: 25px;
+                        font-size: 20px !important;
+                        margin-bottom: 25px !important;
                     }
-                    .gameBoard {
-                        width: 350px !important;
-                        height: auto !important;
+                    #gameBody.gameBoard, .gameBoard {
+                        width: 360px !important;
+                        height: 360px !important;
                         padding: 10px !important;
-                        grid-gap: 5px !important;
-                        border-radius: 8px;
-                        background-color: rgba(0,0,0,0.15);
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                        box-sizing: border-box;
-                        margin: 0 auto;
-                        display: grid !important;
-                        grid-template-columns: repeat(4, 1fr) !important;
-                        grid-template-rows: repeat(4, 1fr) !important;
+                        grid-gap: 6px !important;
+                        border-radius: 8px !important;
+                        background-color: rgba(0,0,0,0.15) !important;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                        box-sizing: border-box !important;
+                        margin: 0 auto !important;
+                        display: inline-grid !important;
                     }
-                    .item {
-                        width: auto !important;
-                        height: 0 !important;
-                        padding-bottom: 100% !important;
-                        position: relative !important;
-                        border-radius: 6px;
-                        box-shadow: none;
+                    #gameBody .item, .gameBoard .item {
+                        width: 100% !important;
+                        aspect-ratio: 1/1 !important;
+                        box-sizing: border-box !important;
+                        font-size: 24px !important;
+                        border-radius: 6px !important;
+                        box-shadow: none !important;
                         background-color: rgba(255,255,255,0.2) !important;
-                        transition: all 0.1s ease;
-                        overflow: hidden !important;
+                        transition: all 0.1s ease !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
                     }
                     .item:not(.emptyItem) {
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                    }
-                    /* 数字居中显示 */
-                    .item:not(.emptyItem)::before {
-                        content: attr(data-value);
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        font-size: 22px;
-                        font-weight: bold;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
                     }
                     .gameRule {
-                        font-size: 15px;
-                        margin-top: 20px;
-                        color: rgba(255,255,255,0.7);
+                        font-size: 15px !important;
+                        margin-top: 20px !important;
+                        color: rgba(255,255,255,0.7) !important;
                     }
                     .scoreAndRefresh {
-                        width: 350px;
-                        display: flex;
-                        justify-content: space-between;
-                        margin: 20px auto 0;
-                        box-sizing: border-box;
+                        width: 360px !important;
+                        display: flex !important;
+                        justify-content: space-between !important;
+                        margin: 20px auto 0 !important;
+                        box-sizing: border-box !important;
                     }
                     .gameScore {
-                        font-size: 20px;
-                        display: flex;
-                        align-items: center;
+                        font-size: 20px !important;
+                        display: flex !important;
+                        align-items: center !important;
                     }
                     .btn {
-                        font-size: 15px;
-                        padding: 8px 16px;
-                        border-radius: 4px;
+                        font-size: 15px !important;
+                        padding: 8px 16px !important;
+                        border-radius: 4px !important;
                     }
                 }
                 /* 移动端样式 */
@@ -522,12 +523,6 @@ $(function () {
                 }
             }
             isNewRndItem = true;
-            
-            // 修复电脑端数字显示
-            if (window.innerWidth >= 768) {
-                fixDesktopLayout();
-            }
-            
             return;
         }
     }
@@ -537,8 +532,6 @@ $(function () {
         var value = element.html();
         if (value) {
             element.addClass('item-' + value);
-            // 添加data-value属性用于CSS显示
-            element.attr('data-value', value);
         }
     }
 
@@ -547,8 +540,6 @@ $(function () {
         element.removeClass(function(index, className) {
             return (className.match(/(^|\s)item-\d+/g) || []).join(' ');
         });
-        // 移除data-value属性
-        element.removeAttr('data-value');
     }
 
     function move(direction) {
@@ -625,45 +616,6 @@ $(function () {
         
         // 设置移动端触摸事件
         setupMobileTouchEvents();
-        
-        // 修复电脑端布局
-        fixDesktopLayout();
-    }
-    
-    // 修复电脑端布局问题
-    function fixDesktopLayout() {
-        if (window.innerWidth >= 768) {
-            // 确保网格布局正确应用
-            $('.gameBoard').css({
-                'display': 'grid',
-                'grid-template-columns': 'repeat(4, 1fr)',
-                'grid-template-rows': 'repeat(4, 1fr)',
-                'width': '350px',
-                'padding': '10px',
-                'grid-gap': '5px'
-            });
-            
-            // 确保每个方块具有相同的高宽比
-            $('.item').each(function() {
-                $(this).css({
-                    'width': 'auto',
-                    'height': '0',
-                    'padding-bottom': '100%',
-                    'position': 'relative',
-                    'overflow': 'hidden'
-                });
-                
-                // 如果有数值，确保正确显示
-                var value = $(this).html();
-                if (value && value.trim() !== '') {
-                    $(this).html('');
-                    $(this).attr('data-value', value);
-                }
-            });
-            
-            // 添加调试信息
-            console.log("已修复桌面布局");
-        }
     }
 
     //随机生成新元素
@@ -679,11 +631,6 @@ $(function () {
             
             // 添加数字对应的 CSS 类
             addNumberClass(emptyItems.eq(newRndSite));
-            
-            // 电脑端特殊处理
-            if (window.innerWidth >= 768) {
-                fixDesktopLayout();
-            }
         }
     }
 
@@ -851,9 +798,4 @@ $(function () {
         }
         $('#rankingBody').html(html);
     }
-
-    // 窗口大小变化时修复布局
-    $(window).resize(function() {
-        fixDesktopLayout();
-    });
 });
