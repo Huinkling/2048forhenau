@@ -139,18 +139,40 @@ $(function () {
                     color: #333 !important;
                 }
                 /* 数字方块样式 */
-                .item-2 { background-color: #eee4da !important; }
-                .item-4 { background-color: #ede0c8 !important; }
-                .item-8 { background-color: #f2b179 !important; color: white !important; }
-                .item-16 { background-color: #f59563 !important; color: white !important; }
-                .item-32 { background-color: #f67c5f !important; color: white !important; }
-                .item-64 { background-color: #f65e3b !important; color: white !important; }
-                .item-128 { background-color: #edcf72 !important; color: white !important; }
-                .item-256 { background-color: #edcc61 !important; color: white !important; }
-                .item-512 { background-color: #edc850 !important; color: white !important; }
-                .item-1024 { background-color: #edc53f !important; color: white !important; font-size: 18px !important; }
-                .item-2048 { background-color: #edc22e !important; color: white !important; font-size: 18px !important; }
-                .item-4096 { background-color: #3c3a32 !important; color: white !important; font-size: 18px !important; }
+                .item-2 { background-color: #eee4da !important; color: #776e65 !important; }
+                .item-4 { background-color: #ede0c8 !important; color: #776e65 !important; }
+                .item-8 { background-color: #f2b179 !important; color: #fff !important; }
+                .item-16 { background-color: #f59563 !important; color: #fff !important; }
+                .item-32 { background-color: #f67c5f !important; color: #fff !important; }
+                .item-64 { background-color: #f65e3b !important; color: #fff !important; }
+                .item-128 { background-color: #edcf72 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 207, 114, 0.5) !important; }
+                .item-256 { background-color: #edcc61 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 204, 97, 0.5) !important; }
+                .item-512 { background-color: #edc850 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 200, 80, 0.5) !important; }
+                .item-1024 { background-color: #edc53f !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(237, 197, 63, 0.5) !important; }
+                .item-2048 { background-color: #edc22e !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(237, 194, 46, 0.6) !important; }
+                .item-4096 { background-color: #3c3a32 !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(60, 58, 50, 0.5) !important; }
+                /* 深色主题下的方块颜色调整 */
+                .dark-theme .item-2 { background-color: #50463c !important; color: #f9f6f2 !important; }
+                .dark-theme .item-4 { background-color: #5c4d3c !important; color: #f9f6f2 !important; }
+                .dark-theme .item-8 { background-color: #976437 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-16 { background-color: #9c5a30 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-32 { background-color: #a04b2d !important; color: #f9f6f2 !important; }
+                .dark-theme .item-64 { background-color: #a33b1f !important; color: #f9f6f2 !important; }
+                .dark-theme .item-128 { background-color: #9a8437 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(154, 132, 55, 0.5) !important; }
+                .dark-theme .item-256 { background-color: #9d8330 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(157, 131, 48, 0.5) !important; }
+                .dark-theme .item-512 { background-color: #a08121 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(160, 129, 33, 0.5) !important; }
+                .dark-theme .item-1024 { background-color: #a37f1a !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(163, 127, 26, 0.5) !important; }
+                .dark-theme .item-2048 { background-color: #a57d0f !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(165, 125, 15, 0.6) !important; }
+                .dark-theme .item-4096 { background-color: #6c6a63 !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(108, 106, 99, 0.5) !important; }
+                /* 方块合并动画 */
+                @keyframes tile-pop {
+                    0% { transform: scale(0.8); }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); }
+                }
+                .item:not(.emptyItem) {
+                    animation: tile-pop 0.2s ease-in-out !important;
+                }
                 /* 微信浏览器专用样式 */
                 .wechat-browser html, .wechat-browser body {
                     height: 100% !important;
