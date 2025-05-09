@@ -481,6 +481,9 @@ $(function () {
         //刷新颜色
         $('#gameOverModal').modal('hide');
         $('#rankingModal').modal('hide');
+        
+        // 应用内联样式
+        applyNumberStyles();
     }
 
     function getSideItem(currentItem, direction) {
@@ -561,6 +564,9 @@ $(function () {
                 }
             }
             isNewRndItem = true;
+            
+            // 应用内联样式
+            applyNumberStyles();
             return;
         }
     }
@@ -569,7 +575,13 @@ $(function () {
     function addNumberClass(element) {
         var value = element.html();
         if (value) {
+            // 先移除所有可能的数字类
+            removeNumberClasses(element);
+            // 添加当前数字对应的类
             element.addClass('item-' + value);
+            
+            // 确保样式立即应用 - 强制重新计算样式
+            element[0] && element[0].offsetHeight;
         }
     }
 
@@ -601,6 +613,9 @@ $(function () {
             newRndItem();
             isNewRndItem = false;
         }
+        
+        // 应用内联样式
+        applyNumberStyles();
     }
 
     function isGameOver() {
@@ -654,6 +669,9 @@ $(function () {
         
         // 设置移动端触摸事件
         setupMobileTouchEvents();
+        
+        // 应用内联样式
+        applyNumberStyles();
     }
 
     //随机生成新元素
@@ -669,6 +687,9 @@ $(function () {
             
             // 添加数字对应的 CSS 类
             addNumberClass(emptyItems.eq(newRndSite));
+            
+            // 应用内联样式
+            applyNumberStyles();
         }
     }
 
@@ -835,5 +856,108 @@ $(function () {
                     '</tr>';
         }
         $('#rankingBody').html(html);
+    }
+
+    // 直接应用到元素上的内联样式，确保能覆盖外部CSS
+    function applyNumberStyles() {
+        $('.item').each(function() {
+            var $this = $(this);
+            var value = $this.html();
+            
+            // 重置所有样式
+            $this.attr('style', '');
+            
+            if (!value) {
+                $this.css({
+                    'background-color': 'rgba(238, 228, 218, 0.15)',
+                    'transition': 'background-color 0.25s ease'
+                });
+                return;
+            }
+            
+            // 根据数字值设置样式
+            var styles = {};
+            
+            // 基本样式
+            styles['transition'] = 'all 0.25s ease';
+            styles['font-weight'] = 'bold';
+            
+            // 根据数字设置不同的背景色和文字色
+            switch (value) {
+                case '2':
+                    styles['background-color'] = '#eee4da';
+                    styles['color'] = '#776e65';
+                    break;
+                case '4':
+                    styles['background-color'] = '#ede0c8';
+                    styles['color'] = '#776e65';
+                    break;
+                case '8':
+                    styles['background-color'] = '#f5d1aa';
+                    styles['color'] = '#776e65';
+                    break;
+                case '16':
+                    styles['background-color'] = '#f5c089';
+                    styles['color'] = '#776e65';
+                    break;
+                case '32':
+                    styles['background-color'] = '#f5b075';
+                    styles['color'] = '#776e65';
+                    break;
+                case '64':
+                    styles['background-color'] = '#f5a063';
+                    styles['color'] = '#776e65';
+                    break;
+                case '128':
+                    styles['background-color'] = '#f9e79f';
+                    styles['color'] = '#776e65';
+                    styles['box-shadow'] = '0 0 10px rgba(249, 231, 159, 0.3)';
+                    break;
+                case '256':
+                    styles['background-color'] = '#f7dc6f';
+                    styles['color'] = '#776e65';
+                    styles['box-shadow'] = '0 0 10px rgba(247, 220, 111, 0.3)';
+                    break;
+                case '512':
+                    styles['background-color'] = '#f4d03f';
+                    styles['color'] = '#776e65';
+                    styles['box-shadow'] = '0 0 10px rgba(244, 208, 63, 0.3)';
+                    break;
+                case '1024':
+                    styles['background-color'] = '#f1c40f';
+                    styles['color'] = '#776e65';
+                    styles['box-shadow'] = '0 0 10px rgba(241, 196, 15, 0.3)';
+                    styles['font-size'] = '18px';
+                    break;
+                case '2048':
+                    styles['background-color'] = '#f39c12';
+                    styles['color'] = '#776e65';
+                    styles['box-shadow'] = '0 0 10px rgba(243, 156, 18, 0.3)';
+                    styles['font-size'] = '18px';
+                    break;
+                case '4096':
+                    styles['background-color'] = '#e67e22';
+                    styles['color'] = '#fff';
+                    styles['box-shadow'] = '0 0 10px rgba(230, 126, 34, 0.3)';
+                    styles['font-size'] = '18px';
+                    break;
+                case '8192':
+                    styles['background-color'] = '#d35400';
+                    styles['color'] = '#fff';
+                    styles['box-shadow'] = '0 0 10px rgba(211, 84, 0, 0.3)';
+                    styles['font-size'] = '16px';
+                    break;
+                default:
+                    if (parseInt(value) > 8192) {
+                        styles['background-color'] = '#c0392b';
+                        styles['color'] = '#fff';
+                        styles['box-shadow'] = '0 0 10px rgba(192, 57, 43, 0.3)';
+                        styles['font-size'] = '16px';
+                    }
+            }
+            
+            // 应用样式
+            $this.css(styles);
+        });
     }
 });
