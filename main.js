@@ -168,29 +168,42 @@ $(function () {
                         margin-bottom: 25px;
                     }
                     .gameBoard {
-                        width: 360px;
-                        height: 360px;
-                        padding: 10px;
-                        grid-gap: 6px;
+                        width: 350px !important;
+                        height: auto !important;
+                        padding: 10px !important;
+                        grid-gap: 5px !important;
                         border-radius: 8px;
                         background-color: rgba(0,0,0,0.15);
                         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                         box-sizing: border-box;
                         margin: 0 auto;
-                    }
-                    .gameBoard .item {
-                        width: 100%;
-                        aspect-ratio: 1/1;
+                        display: grid !important;
+                        grid-template-columns: repeat(4, 1fr) !important;
+                        grid-template-rows: repeat(4, 1fr) !important;
                     }
                     .item {
-                        font-size: 24px;
+                        width: auto !important;
+                        height: 0 !important;
+                        padding-bottom: 100% !important;
+                        position: relative !important;
                         border-radius: 6px;
                         box-shadow: none;
-                        background-color: rgba(255,255,255,0.2);
+                        background-color: rgba(255,255,255,0.2) !important;
                         transition: all 0.1s ease;
+                        overflow: hidden !important;
                     }
                     .item:not(.emptyItem) {
                         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    }
+                    /* 数字居中显示 */
+                    .item:not(.emptyItem)::before {
+                        content: attr(data-value);
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 22px;
+                        font-weight: bold;
                     }
                     .gameRule {
                         font-size: 15px;
@@ -198,7 +211,7 @@ $(function () {
                         color: rgba(255,255,255,0.7);
                     }
                     .scoreAndRefresh {
-                        width: 360px;
+                        width: 350px;
                         display: flex;
                         justify-content: space-between;
                         margin: 20px auto 0;
@@ -509,6 +522,12 @@ $(function () {
                 }
             }
             isNewRndItem = true;
+            
+            // 修复电脑端数字显示
+            if (window.innerWidth >= 768) {
+                fixDesktopLayout();
+            }
+            
             return;
         }
     }
@@ -518,6 +537,8 @@ $(function () {
         var value = element.html();
         if (value) {
             element.addClass('item-' + value);
+            // 添加data-value属性用于CSS显示
+            element.attr('data-value', value);
         }
     }
 
@@ -526,6 +547,8 @@ $(function () {
         element.removeClass(function(index, className) {
             return (className.match(/(^|\s)item-\d+/g) || []).join(' ');
         });
+        // 移除data-value属性
+        element.removeAttr('data-value');
     }
 
     function move(direction) {
@@ -602,6 +625,45 @@ $(function () {
         
         // 设置移动端触摸事件
         setupMobileTouchEvents();
+        
+        // 修复电脑端布局
+        fixDesktopLayout();
+    }
+    
+    // 修复电脑端布局问题
+    function fixDesktopLayout() {
+        if (window.innerWidth >= 768) {
+            // 确保网格布局正确应用
+            $('.gameBoard').css({
+                'display': 'grid',
+                'grid-template-columns': 'repeat(4, 1fr)',
+                'grid-template-rows': 'repeat(4, 1fr)',
+                'width': '350px',
+                'padding': '10px',
+                'grid-gap': '5px'
+            });
+            
+            // 确保每个方块具有相同的高宽比
+            $('.item').each(function() {
+                $(this).css({
+                    'width': 'auto',
+                    'height': '0',
+                    'padding-bottom': '100%',
+                    'position': 'relative',
+                    'overflow': 'hidden'
+                });
+                
+                // 如果有数值，确保正确显示
+                var value = $(this).html();
+                if (value && value.trim() !== '') {
+                    $(this).html('');
+                    $(this).attr('data-value', value);
+                }
+            });
+            
+            // 添加调试信息
+            console.log("已修复桌面布局");
+        }
     }
 
     //随机生成新元素
@@ -617,6 +679,11 @@ $(function () {
             
             // 添加数字对应的 CSS 类
             addNumberClass(emptyItems.eq(newRndSite));
+            
+            // 电脑端特殊处理
+            if (window.innerWidth >= 768) {
+                fixDesktopLayout();
+            }
         }
     }
 
@@ -784,4 +851,9 @@ $(function () {
         }
         $('#rankingBody').html(html);
     }
+
+    // 窗口大小变化时修复布局
+    $(window).resize(function() {
+        fixDesktopLayout();
+    });
 });
