@@ -138,40 +138,56 @@ $(function () {
                     font-size: 20px !important;
                     color: #333 !important;
                 }
-                /* 数字方块样式 */
-                .item-2 { background-color: #eee4da !important; color: #776e65 !important; }
-                .item-4 { background-color: #ede0c8 !important; color: #776e65 !important; }
-                .item-8 { background-color: #f2b179 !important; color: #fff !important; }
-                .item-16 { background-color: #f59563 !important; color: #fff !important; }
-                .item-32 { background-color: #f67c5f !important; color: #fff !important; }
-                .item-64 { background-color: #f65e3b !important; color: #fff !important; }
-                .item-128 { background-color: #edcf72 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 207, 114, 0.5) !important; }
-                .item-256 { background-color: #edcc61 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 204, 97, 0.5) !important; }
-                .item-512 { background-color: #edc850 !important; color: #fff !important; box-shadow: 0 0 10px rgba(237, 200, 80, 0.5) !important; }
-                .item-1024 { background-color: #edc53f !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(237, 197, 63, 0.5) !important; }
-                .item-2048 { background-color: #edc22e !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(237, 194, 46, 0.6) !important; }
-                .item-4096 { background-color: #3c3a32 !important; color: #fff !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(60, 58, 50, 0.5) !important; }
-                /* 深色主题下的方块颜色调整 */
-                .dark-theme .item-2 { background-color: #50463c !important; color: #f9f6f2 !important; }
-                .dark-theme .item-4 { background-color: #5c4d3c !important; color: #f9f6f2 !important; }
-                .dark-theme .item-8 { background-color: #976437 !important; color: #f9f6f2 !important; }
-                .dark-theme .item-16 { background-color: #9c5a30 !important; color: #f9f6f2 !important; }
-                .dark-theme .item-32 { background-color: #a04b2d !important; color: #f9f6f2 !important; }
-                .dark-theme .item-64 { background-color: #a33b1f !important; color: #f9f6f2 !important; }
-                .dark-theme .item-128 { background-color: #9a8437 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(154, 132, 55, 0.5) !important; }
-                .dark-theme .item-256 { background-color: #9d8330 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(157, 131, 48, 0.5) !important; }
-                .dark-theme .item-512 { background-color: #a08121 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(160, 129, 33, 0.5) !important; }
-                .dark-theme .item-1024 { background-color: #a37f1a !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(163, 127, 26, 0.5) !important; }
-                .dark-theme .item-2048 { background-color: #a57d0f !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(165, 125, 15, 0.6) !important; }
-                .dark-theme .item-4096 { background-color: #6c6a63 !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(108, 106, 99, 0.5) !important; }
+                /* 数字方块样式 - 使用浅色调 */
+                .item-2 { background-color: #eee4da !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-4 { background-color: #ede0c8 !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-8 { background-color: #f5d1aa !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-16 { background-color: #f5c089 !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-32 { background-color: #f5b075 !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-64 { background-color: #f5a063 !important; color: #776e65 !important; transition: all 0.25s ease !important; }
+                .item-128 { background-color: #f9e79f !important; color: #776e65 !important; transition: all 0.25s ease !important; box-shadow: 0 0 10px rgba(249, 231, 159, 0.3) !important; }
+                .item-256 { background-color: #f7dc6f !important; color: #776e65 !important; transition: all 0.25s ease !important; box-shadow: 0 0 10px rgba(247, 220, 111, 0.3) !important; }
+                .item-512 { background-color: #f4d03f !important; color: #776e65 !important; transition: all 0.25s ease !important; box-shadow: 0 0 10px rgba(244, 208, 63, 0.3) !important; }
+                .item-1024 { background-color: #f1c40f !important; color: #776e65 !important; transition: all 0.25s ease !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(241, 196, 15, 0.3) !important; }
+                .item-2048 { background-color: #f39c12 !important; color: #776e65 !important; transition: all 0.25s ease !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(243, 156, 18, 0.3) !important; }
+                .item-4096 { background-color: #e67e22 !important; color: #fff !important; transition: all 0.25s ease !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(230, 126, 34, 0.3) !important; }
+                .item-8192 { background-color: #d35400 !important; color: #fff !important; transition: all 0.25s ease !important; font-size: 16px !important; box-shadow: 0 0 10px rgba(211, 84, 0, 0.3) !important; }
+                
+                /* 深色主题下的方块颜色调整 - 更柔和的色调 */
+                .dark-theme .item-2 { background-color: #5d6d7e !important; color: #f9f6f2 !important; }
+                .dark-theme .item-4 { background-color: #566573 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-8 { background-color: #5499c7 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-16 { background-color: #4a90c0 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-32 { background-color: #3f85b8 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-64 { background-color: #347ab0 !important; color: #f9f6f2 !important; }
+                .dark-theme .item-128 { background-color: #5dade2 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(93, 173, 226, 0.3) !important; }
+                .dark-theme .item-256 { background-color: #4a98d6 !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(74, 152, 214, 0.3) !important; }
+                .dark-theme .item-512 { background-color: #3883ca !important; color: #f9f6f2 !important; box-shadow: 0 0 10px rgba(56, 131, 202, 0.3) !important; }
+                .dark-theme .item-1024 { background-color: #266fbd !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(38, 111, 189, 0.3) !important; }
+                .dark-theme .item-2048 { background-color: #145a9c !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(20, 90, 156, 0.3) !important; }
+                .dark-theme .item-4096 { background-color: #024887 !important; color: #f9f6f2 !important; font-size: 18px !important; box-shadow: 0 0 10px rgba(2, 72, 135, 0.3) !important; }
+                .dark-theme .item-8192 { background-color: #013667 !important; color: #f9f6f2 !important; font-size: 16px !important; box-shadow: 0 0 10px rgba(1, 54, 103, 0.3) !important; }
+                
                 /* 方块合并动画 */
                 @keyframes tile-pop {
-                    0% { transform: scale(0.8); }
-                    50% { transform: scale(1.1); }
-                    100% { transform: scale(1); }
+                    0% { transform: scale(0.8); opacity: 0.8; }
+                    50% { transform: scale(1.1); opacity: 1; }
+                    100% { transform: scale(1); opacity: 1; }
                 }
+                
                 .item:not(.emptyItem) {
-                    animation: tile-pop 0.2s ease-in-out !important;
+                    animation: tile-pop 0.25s ease !important;
+                    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease !important;
+                }
+                
+                /* 空方块样式 */
+                .emptyItem {
+                    background-color: rgba(238, 228, 218, 0.15) !important;
+                    transition: background-color 0.25s ease !important;
+                }
+                
+                .dark-theme .emptyItem {
+                    background-color: rgba(93, 109, 126, 0.15) !important;
                 }
                 /* 微信浏览器专用样式 */
                 .wechat-browser html, .wechat-browser body {
