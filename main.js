@@ -72,6 +72,7 @@ $(function () {
                     grid-gap: 10px;
                     width: 300px;
                     max-width: 90%;
+                    box-sizing: border-box;
                 }
                 .item {
                     background-color: rgba(255,255,255,0.3);
@@ -82,6 +83,7 @@ $(function () {
                     font-size: 24px;
                     font-weight: bold;
                     aspect-ratio: 1/1;
+                    box-sizing: border-box;
                 }
                 .gameRule {
                     margin-top: 15px;
@@ -150,7 +152,12 @@ $(function () {
                     .container {
                         max-width: 600px;
                         margin: 0 auto;
-                        padding: 20px 0;
+                        padding: 20px;
+                        box-sizing: border-box;
+                    }
+                    .main {
+                        width: 100%;
+                        box-sizing: border-box;
                     }
                     .gameName {
                         font-size: 32px;
@@ -161,23 +168,28 @@ $(function () {
                         margin-bottom: 25px;
                     }
                     .gameBoard {
-                        padding: 12px;
-                        width: 380px;
-                        grid-gap: 8px;
+                        width: 360px;
+                        height: 360px;
+                        padding: 10px;
+                        grid-gap: 6px;
                         border-radius: 8px;
                         background-color: rgba(0,0,0,0.15);
                         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        box-sizing: border-box;
+                        margin: 0 auto;
+                    }
+                    .gameBoard .item {
+                        width: 100%;
+                        aspect-ratio: 1/1;
                     }
                     .item {
-                        font-size: 26px;
+                        font-size: 24px;
                         border-radius: 6px;
-                        height: auto;
-                        width: 100%;
-                        transform: scale(0.95);
-                        transition: transform 0.1s ease, background-color 0.2s ease;
+                        box-shadow: none;
+                        background-color: rgba(255,255,255,0.2);
+                        transition: all 0.1s ease;
                     }
                     .item:not(.emptyItem) {
-                        transform: scale(1);
                         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                     }
                     .gameRule {
@@ -186,10 +198,11 @@ $(function () {
                         color: rgba(255,255,255,0.7);
                     }
                     .scoreAndRefresh {
-                        width: 380px;
+                        width: 360px;
                         display: flex;
                         justify-content: space-between;
-                        margin-top: 20px;
+                        margin: 20px auto 0;
+                        box-sizing: border-box;
                     }
                     .gameScore {
                         font-size: 20px;
